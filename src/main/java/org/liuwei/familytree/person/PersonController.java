@@ -27,6 +27,6 @@ public class PersonController {
     @RequestMapping("/")
     @ResponseBody
     public List<Person> persons(){
-        return personRepository.list();
+        return personRepository.all();
     }
 }

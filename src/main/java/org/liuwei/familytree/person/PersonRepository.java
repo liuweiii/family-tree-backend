@@ -16,6 +16,7 @@ import java.util.List;
 public class PersonRepository {
     private static final String SQL_BY_ID = "select * from person where id=?";
     private static final String SQL_LIST = "select * from person";
+    private static final String SQL_BY_CHILD_ID = "select * from person where {}=?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -27,17 +28,25 @@ public class PersonRepository {
             Person person = new Person.Builder(rs.getString("id"))
                     .name(rs.getString("name"))
                     .introduce(rs.getString("introduce"))
-                    .six(Enum.valueOf(Person.Six.class, rs.getString("six"))).build();
+                    .six(Enum.valueOf(Person.Six.class, rs.getString("six")))
+                    .fatherId(rs.getString("fatherId"))
+                    .motherId(rs.getString("motherId"))
+                    .spouseId(rs.getString("spouseId"))
+                    .build();
             return person;
         }
 
     }
 
-    public List<Person> list() {
+    public List<Person> all() {
         return jdbcTemplate.query(SQL_LIST, new PersonRowMapper());
     }
 
     public Person byId(String id) {
         return jdbcTemplate.queryForObject(SQL_BY_ID, new Object[]{id}, new PersonRowMapper());
+    }
+
+    public Person getByChildId(String field, String childId){
+        return null;
     }
 }

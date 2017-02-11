@@ -4,6 +4,10 @@ package org.liuwei.familytree.person;
  * Created by apple on 2017/2/2.
  */
 public class Person {
+    public String getSpouseId() {
+        return spouseId;
+    }
+
     enum Six{
         male,
         female
@@ -28,15 +32,16 @@ public class Person {
     private String id;
     private String name;
     private Six six;
-    private Person father;
-    private Person mother;
+    private String fatherId;
+    private String motherId;
+    private String spouseId;
 
-    public Person getFather() {
-        return father;
+    public String getFatherId() {
+        return fatherId;
     }
 
-    public Person getMother() {
-        return mother;
+    public String getMotherId() {
+        return motherId;
     }
 
     private String introduce;
@@ -50,8 +55,9 @@ public class Person {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", six=" + six +
-                ", father=" + father +
-                ", mother=" + mother +
+                ", fatherId=" + fatherId +
+                ", motherId=" + motherId +
+                ", spouseId=" + spouseId +
                 ", introduce='" + introduce + '\'' +
                 '}';
     }
@@ -61,16 +67,18 @@ public class Person {
 
         private String name;
         private Six six;
-        private Person father;
-        private Person mother;
+        private String fatherId;
+        private String motherId;
         private String introduce;
+        private String spouseId;
 
         public Builder(String id){
             this.id = id;
             this.name = "";
             this.six = Six.male;
-            this.father = null;
-            this.mother = null;
+            this.fatherId = null;
+            this.motherId = null;
+            this.spouseId = null;
             this.introduce = "";
         }
 
@@ -84,13 +92,18 @@ public class Person {
             return this;
         }
 
-        public Builder father(Person father){
-            this.father = father;
+        public Builder fatherId(String father){
+            this.fatherId = father;
             return this;
         }
 
-        public Builder mother(Person mother){
-            this.mother = mother;
+        public Builder motherId(String mother){
+            this.motherId = mother;
+            return this;
+        }
+
+        public Builder spouseId(String spouse){
+            this.spouseId = spouse;
             return this;
         }
 
@@ -104,9 +117,10 @@ public class Person {
             p.id = this.id;
             p.name = this.name;
             p.six = this.six;
-            p.father = this.father;
-            p.mother = this.mother;
+            p.fatherId = this.fatherId;
+            p.motherId = this.motherId;
             p.introduce = this.introduce;
+            p.spouseId = this.spouseId;
             return p;
         }
     }
