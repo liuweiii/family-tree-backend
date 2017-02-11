@@ -2,7 +2,6 @@ package org.liuwei.familytree.person;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -20,15 +19,35 @@ public class PersonRepositoryTest {
     private PersonRepository personRepository;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         personRepository = new PersonRepository();
         personRepository.jdbcTemplate = mock(JdbcTemplate.class);
     }
 
     @Test
-    public void shouldGetAllPersons(){
+    public void shouldGetAllPersonsSucceed() {
         when(personRepository.jdbcTemplate.query(any(String.class), any(RowMapper.class))).thenReturn(null);
         personRepository.all();
-        verify(personRepository.jdbcTemplate).query(eq("select * from person"),any(RowMapper.class));
+        verify(personRepository.jdbcTemplate).query(eq("select * from person"), any(RowMapper.class));
+    }
+
+    @Test
+    public void shouldGetByIdSucceed() {
+        when(personRepository.jdbcTemplate.queryForObject(any(String.class), any(Object[].class), any(RowMapper.class)))
+                .thenReturn(null);
+        personRepository.byId("123");
+        verify(personRepository.jdbcTemplate).queryForObject(eq("select * from person where id=?")
+                ,any(Object[].class), any(RowMapper.class));
+    }
+
+    @Test
+    public void shouldGetFatherSucceed(){
+        when(personRepository.jdbcTemplate.queryForObject(any(String.class), any(Object[].class), any(RowMapper.class)))
+                .thenReturn(null);
+        personRepository.getByMyId("fatherId", "123");
+        verify(personRepository.jdbcTemplate).queryForObject(
+                eq("select myFamily.* from person as me join person as myFamily " +
+                        "on me.fatherId = myFamily.id where me.id = ?"),
+                any(Object[].class), any(RowMapper.class));
     }
 }

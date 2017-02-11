@@ -12,7 +12,15 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    public Person getFatherByChildId(String childId){
-        return personRepository.getByChildId("fatherId", childId);
+    public Person getFatherByMyId(String myId){
+        return personRepository.getByMyId("fatherId", myId);
+    }
+
+    public Person getMotherByMyId(String myId){
+        return personRepository.getByMyId("motherId", myId);
+    }
+
+    public Person getSpouseByMyId(String myId){
+        return personRepository.getByMyId("spouseId", myId);
     }
 }

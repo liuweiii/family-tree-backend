@@ -16,7 +16,8 @@ import java.util.List;
 public class PersonRepository {
     private static final String SQL_BY_ID = "select * from person where id=?";
     private static final String SQL_LIST = "select * from person";
-    private static final String SQL_BY_CHILD_ID = "select * from person where {}=?";
+    private static final String SQL_BY_CHILD_ID = "select myFamily.* from person as me join person as myFamily " +
+            "on me.%s = myFamily.id where me.id = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -46,7 +47,8 @@ public class PersonRepository {
         return jdbcTemplate.queryForObject(SQL_BY_ID, new Object[]{id}, new PersonRowMapper());
     }
 
-    public Person getByChildId(String field, String childId){
-        return null;
+    public Person getByMyId(String field, String myId) {
+        return jdbcTemplate.queryForObject(String.format(SQL_BY_CHILD_ID, field),
+                new Object[]{myId}, new PersonRowMapper());
     }
 }

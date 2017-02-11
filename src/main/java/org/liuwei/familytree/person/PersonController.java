@@ -18,15 +18,36 @@ public class PersonController {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private PersonService personService;
+
+    @RequestMapping("/")
+    @ResponseBody
+    public List<Person> persons(){
+        return personRepository.all();
+    }
+
     @RequestMapping("/{id}")
     @ResponseBody
     public Person person(@PathVariable("id") String id){
         return personRepository.byId(id);
     }
 
-    @RequestMapping("/")
+    @RequestMapping("/{id}/father")
     @ResponseBody
-    public List<Person> persons(){
-        return personRepository.all();
+    public Person father(@PathVariable("id") String id){
+        return personService.getFatherByMyId(id);
+    }
+
+    @RequestMapping("/{id}/mother")
+    @ResponseBody
+    public Person mother(@PathVariable("id") String id){
+        return personService.getMotherByMyId(id);
+    }
+
+    @RequestMapping("/{id}/spouse")
+    @ResponseBody
+    public Person spouse(@PathVariable("id") String id){
+        return personService.getSpouseByMyId(id);
     }
 }
