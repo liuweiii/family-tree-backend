@@ -48,7 +48,11 @@ public class PersonRepository {
     }
 
     public Person getByMyId(String field, String myId) {
-        return jdbcTemplate.queryForObject(String.format(SQL_BY_CHILD_ID, field),
-                new Object[]{myId}, new PersonRowMapper());
+        try {
+            return jdbcTemplate.queryForObject(String.format(SQL_BY_CHILD_ID, field),
+                    new Object[]{myId}, new PersonRowMapper());
+        }catch (Exception e){
+            return null;
+        }
     }
 }
