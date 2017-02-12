@@ -16,6 +16,8 @@ import java.util.List;
 public class PersonRepository {
     private static final String SQL_BY_ID = "select * from person where id=?";
     private static final String SQL_SEARCH_BY_NAME = "select * from person where name like '%%%s%%'";
+    private static final String SQL_GET_CHILDREN = "select child.* from person as me join person as child " +
+            "on me.id = child.%s where me.id=?";
     private static final String SQL_LIST = "select * from person";
     private static final String SQL_BY_CHILD_ID = "select myFamily.* from person as me join person as myFamily " +
             "on me.%s = myFamily.id where me.id = ?";
@@ -52,15 +54,41 @@ public class PersonRepository {
         try {
             return jdbcTemplate.queryForObject(String.format(SQL_BY_CHILD_ID, field),
                     new Object[]{myId}, new PersonRowMapper());
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public List<Person> searchByName(String name){
-        try{
+    public List<Person> searchByName(String name) {
+        try {
             return jdbcTemplate.query(String.format(SQL_SEARCH_BY_NAME, name), new PersonRowMapper());
-        }catch (Exception e){
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<Person> getChildren(String myId, Person.Six mySix) {
+        try {
+            String field;
+            switch (mySix) {
+                case female: {
+                    field = "motherId";
+                    break;
+                }
+                case male: {
+                    field = "fatherId";
+                    break;
+                }
+                default: {
+                    throw new IllegalArgumentException(" unknown six, can't get children.");
+                }
+            }
+            if (mySix == Person.Six.female) {
+
+            }
+            return jdbcTemplate.query(String.format(SQL_GET_CHILDREN, field),
+                    new Object[]{myId}, new PersonRowMapper());
+        } catch (Exception e) {
             return null;
         }
     }

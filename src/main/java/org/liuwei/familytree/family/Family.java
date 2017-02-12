@@ -3,6 +3,7 @@ package org.liuwei.familytree.family;
 import org.liuwei.familytree.person.Person;
 
 import java.io.BufferedWriter;
+import java.util.List;
 
 /**
  * Created by apple on 2017/2/12.
@@ -32,6 +33,12 @@ public class Family {
     private Person mother;
     private Person spouse;
 
+    public List<Person> getChildren() {
+        return children;
+    }
+
+    private List<Person> children;
+
     private Family(){}
 
     public static class Builder{
@@ -40,6 +47,7 @@ public class Family {
         private Person father;
         private Person mother;
         private Person spouse;
+        private List<Person> children;
 
         public Builder(Person me){
             this.me = me;
@@ -60,12 +68,18 @@ public class Family {
             return this;
         }
 
+        public Builder children(List<Person> children){
+            this.children = children;
+            return this;
+        }
+
         public Family build(){
             Family family = new Family();
             family.me = this.me;
             family.father = this.father;
             family.mother = this.mother;
             family.spouse = this.spouse;
+            family.children = this.children;
             return family;
         }
     }
