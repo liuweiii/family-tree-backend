@@ -36,6 +36,8 @@ public class PersonRepository {
                     .fatherId(rs.getString("fatherId"))
                     .motherId(rs.getString("motherId"))
                     .spouseId(rs.getString("spouseId"))
+                    .birthday(rs.getDate("birthday"))
+                    .dieday(rs.getDate("dieday"))
                     .build();
             return person;
         }
