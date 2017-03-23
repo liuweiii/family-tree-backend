@@ -1,5 +1,6 @@
 package org.liuwei.familytree.person;
 
+import org.liuwei.familytree.utils.Paginate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class PersonService {
         return personRepository.getByMyId("spouseId", myId);
     }
 
-    public List<Person> searchPersonByName(String name){
-        return personRepository.searchByName(name);
+    public Paginate<Person> searchPersonByName(String name, int pageSize, int pageIndex){
+        return personRepository.searchByName(name, pageSize, pageIndex);
     }
 }

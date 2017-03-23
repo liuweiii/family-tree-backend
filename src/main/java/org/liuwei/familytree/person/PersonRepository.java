@@ -1,5 +1,6 @@
 package org.liuwei.familytree.person;
 
+import org.liuwei.familytree.utils.Paginate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,7 +16,10 @@ import java.util.List;
 @Repository
 public class PersonRepository {
     private static final String SQL_BY_ID = "select * from person where id=?";
-    private static final String SQL_SEARCH_BY_NAME = "select * from person where name like '%%%s%%'";
+    private static final String SQL_SEARCH_BY_NAME = "select * from person where name" +
+            " like '%%%s%%' limit %s,%s";
+    private static final String SQL_SEARCH_BY_NAME_COUNT = "select count(*) from person where name"+
+            " like '%%%s%%'";
     private static final String SQL_GET_CHILDREN = "select child.* from person as me join person as child " +
             "on me.id = child.%s where me.id=?";
     private static final String SQL_LIST = "select * from person";
@@ -61,9 +65,13 @@ public class PersonRepository {
         }
     }
 
-    public List<Person> searchByName(String name) {
+    public Paginate<Person> searchByName(String name, int pageSize, int pageIndex) {
         try {
-            return jdbcTemplate.query(String.format(SQL_SEARCH_BY_NAME, name), new PersonRowMapper());
+            int from = (pageIndex-1)*pageSize;
+            List<Person> persons = jdbcTemplate.query(String.format(SQL_SEARCH_BY_NAME, name, from,pageSize),
+                    new PersonRowMapper());
+            int total = jdbcTemplate.queryForObject(String.format(SQL_SEARCH_BY_NAME_COUNT, name), Integer.class);
+            return new Paginate<>(total, persons);
         } catch (Exception e) {
             return null;
         }

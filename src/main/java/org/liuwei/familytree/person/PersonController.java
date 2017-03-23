@@ -1,5 +1,6 @@
 package org.liuwei.familytree.person;
 
+import org.liuwei.familytree.utils.Paginate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +27,10 @@ public class PersonController {
 
     @RequestMapping("/search")
     @ResponseBody
-    public List<Person> searchByName(@RequestParam("name") String name){
-        return personService.searchPersonByName(name);
+    public Paginate<Person> searchByName(@RequestParam("name") String name,
+                                         @RequestParam("pageSize") Integer pageSize,
+                                         @RequestParam("pageIndex") Integer pageIndex){
+        return personService.searchPersonByName(name, pageSize, pageIndex);
     }
 
     @RequestMapping("/{id}")
